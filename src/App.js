@@ -11,6 +11,10 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
+    this.getAllBooks();
+  }
+
+  getAllBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
@@ -18,14 +22,7 @@ class BooksApp extends React.Component {
 
   changeBookStatus = (book, shelf) => {
     BooksAPI.update(book, shelf).then((result) => {
-      this.setState((state) => ({
-        books: state.books.map((currentBook) => {
-          if(currentBook.id === book.id)
-            currentBook.shelf = shelf
-
-          return currentBook
-        })
-      }))
+      this.getAllBooks();
     })
   }
 
@@ -41,7 +38,6 @@ class BooksApp extends React.Component {
         />
         <Route path='/search' render={() => (
             <SearchBooks
-              books={this.state.books}
               onChangeBook={this.changeBookStatus}
             />
           )}

@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import sortBy from 'sort-by';
-
-import Book from './Book'
+import BookShelf  from './BookShelf'
 
 class ListBooks extends Component {
 
@@ -43,45 +42,24 @@ class ListBooks extends Component {
         </div>
         <div className="list-books-content">
           <div>
+            
+            <BookShelf
+              title={"Currently Reading"}
+              books={reading}
+              onChangeBook={onChangeBook}
+            />
 
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {reading.map((bookReading) => (
-                    <li key={bookReading.id}>
-                      <Book info={bookReading} onChangeBook={onChangeBook} />
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
+            <BookShelf
+              title={"Want to Read"}
+              books={wantRead}
+              onChangeBook={onChangeBook}
+            />
 
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {wantRead.map((bookWantRead) => (
-                    <li key={bookWantRead.id}>
-                      <Book info={bookWantRead} onChangeBook={onChangeBook} />
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {read.map((bookRead) => (
-                    <li key={bookRead.id}>
-                      <Book info={bookRead} onChangeBook={onChangeBook} />
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
+            <BookShelf
+              title={"Read"}
+              books={read}
+              onChangeBook={onChangeBook}
+            />
 
           </div>
         </div>

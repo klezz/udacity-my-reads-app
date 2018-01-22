@@ -1,41 +1,39 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
-import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
-
+import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
 
 class SearchBooks extends Component {
   
   static propTypes = {
-    books: PropTypes.array.isRequired,
     onChangeBook: PropTypes.func.isRequired
   }
 
   state = {
-    query: ''
+    query: '',
+    showingBooks: []
   }
 
+
   updateQuery = (query) => {
-      this.setState({ query: query.trim() })
+    if(query.length > 0) {
+      BooksAPI.search(query).then((books) => {
+        this.setState({showingBooks: books.length > 0 ? books : []})        
+      })
+    }else{
+      this.setState({showingBooks:[]})
+    }
+
+    this.setState({ query: query })
   }
 
 
   render() {
 
-    const { books, onChangeBook } = this.props
+    const { onChangeBook } = this.props
     const { query } = this.state
-
-    let showingBooks = []
-
-    if (query) {
-        const match = new RegExp(escapeRegExp(query), 'i')
-        showingBooks = books.filter((book) => match.test(book.title))
-    }
-
-    showingBooks.sort(sortBy('title'))
 
     return (
       <div className="search-books">
@@ -52,7 +50,7 @@ class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book) => (
+            {this.state.showingBooks.map((book) => (
               <li key={book.id}>
                 <Book info={book} onChangeBook={onChangeBook} />
               </li>
