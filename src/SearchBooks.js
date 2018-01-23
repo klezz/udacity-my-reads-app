@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import { Debounce } from 'react-throttle'
 
 
 class SearchBooks extends Component {
@@ -13,7 +14,6 @@ class SearchBooks extends Component {
   }
 
   state = {
-    query: '',
     showingBooks: []
   }
 
@@ -50,30 +50,30 @@ class SearchBooks extends Component {
     }else{
       this.setState({showingBooks:[]})
     }
-    this.setState({ query: query })
+
   }
 
   render() {
 
-    const { onChangeBook } = this.props
-    const { query } = this.state
+    const { showingBooks } = this.state
 
     return (
       <div className="search-books">
         <div className="search-books-bar">
           <Link className="close-search" to="/" >Close</Link>
           <div className="search-books-input-wrapper">
-            <input 
-              type="text"
-              placeholder="Search by title or author"
-              value={query}
-              onChange={(event) => this.updateQuery(event.target.value)}
-            />
+            <Debounce time="400" handler="onChange">
+              <input 
+                type="text"
+                placeholder="Search by title or author"
+                onChange={(event) => this.updateQuery(event.target.value)}
+              />
+            </Debounce>
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.showingBooks.map((book) => (
+            {showingBooks.map((book) => (
               <li key={book.id}>
                 <Book info={book} onChangeBook={this.changeBookStatus} />
               </li>
