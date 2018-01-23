@@ -8,7 +8,8 @@ import Book from './Book'
 class SearchBooks extends Component {
   
   static propTypes = {
-    onChangeBook: PropTypes.func.isRequired
+    onChangeBook: PropTypes.func.isRequired,
+    booksOnShelf: PropTypes.array.isRequired
   }
 
   state = {
@@ -16,19 +17,41 @@ class SearchBooks extends Component {
     showingBooks: []
   }
 
+  changeBookStatus = (book, shelf) => {
+    let newStateShowingBooks = []
+
+    newStateShowingBooks = this.state.showingBooks.map((currentBook) => {
+      if(currentBook.id === book.id)
+        currentBook.shelf = shelf
+
+      return currentBook
+    })
+
+    this.setState({showingBooks: newStateShowingBooks})
+    this.props.onChangeBook(book, shelf)
+  }
 
   updateQuery = (query) => {
     if(query.length > 0) {
-      BooksAPI.search(query).then((books) => {
-        this.setState({showingBooks: books.length > 0 ? books : []})        
+      BooksAPI.search(query).then((resultBooks) => {
+
+        if(resultBooks.length > 0) {
+          resultBooks = resultBooks.map((returnBook)=> {
+            this.props.booksOnShelf.map((bookOnShelf) => {
+              return returnBook = bookOnShelf.id === returnBook.id ? bookOnShelf : returnBook
+            })
+            return returnBook;
+          });
+          this.setState({showingBooks: resultBooks})     
+        }else{
+          this.setState({showingBooks:[]})
+        }   
       })
     }else{
       this.setState({showingBooks:[]})
     }
-
     this.setState({ query: query })
   }
-
 
   render() {
 
@@ -52,7 +75,7 @@ class SearchBooks extends Component {
           <ol className="books-grid">
             {this.state.showingBooks.map((book) => (
               <li key={book.id}>
-                <Book info={book} onChangeBook={onChangeBook} />
+                <Book info={book} onChangeBook={this.changeBookStatus} />
               </li>
             ))}
           </ol>

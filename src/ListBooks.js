@@ -1,19 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import sortBy from 'sort-by';
 import BookShelf  from './BookShelf'
 
-class ListBooks extends Component {
 
-  static propTypes = {
-    books: PropTypes.array.isRequired,
-    onChangeBook: PropTypes.func.isRequired
-  }
+const ListBooks = function(props) {
 
-  render() {
-    
-    const { books, onChangeBook } = this.props
+    const { books, onChangeBook } = props
 
     let reading = []
     let wantRead = []
@@ -68,7 +62,11 @@ class ListBooks extends Component {
         </div>
       </div>
     )
-  }
+}
+
+ListBooks.propTypes = {
+  books: PropTypes.array.isRequired,
+  onChangeBook: PropTypes.func.isRequired
 }
 
 export default ListBooks

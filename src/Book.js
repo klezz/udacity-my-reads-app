@@ -7,7 +7,7 @@ const Book = function( props ) {
     <div className="book">
       <div className="book-top">
         {props.info.hasOwnProperty('imageLinks') && (
-          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${props.info.imageLinks.thumbnail})` }}></div>
+          <div className="book-cover" style={{ backgroundImage: `url(${props.info.imageLinks.thumbnail})` }}></div>
         )}
         <div className="book-shelf-changer">
           <select value={props.info.shelf || 'none'} onChange={(event) => { props.onChangeBook(props.info, event.target.value) }}>
