@@ -22,7 +22,13 @@ class BooksApp extends React.Component {
 
   changeBookStatus = (book, shelf) => {
     BooksAPI.update(book, shelf).then((result) => {
-      this.getAllBooks();
+      let updateBooksList = []
+
+      updateBooksList = this.state.books.filter((currentBook)=>  currentBook.id !== book.id )
+      book.shelf = shelf
+      updateBooksList.push(book)
+    
+      this.setState({books: updateBooksList})
     })
   }
 
